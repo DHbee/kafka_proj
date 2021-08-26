@@ -2,9 +2,7 @@ package com.dh.kafka.producer;
 
 import com.dh.kafka.config.Key;
 import com.dh.kafka.config.Value;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
@@ -21,10 +19,37 @@ public class Producer {
             properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
             producer = new KafkaProducer<String, String>(properties);
 
-            ProducerRecord msg = new ProducerRecord("test2topic", "m5");
-            producer.send(msg);
+
+            ProducerRecord msg = new ProducerRecord("test2topic", "m8");
+            producer.send(msg, (RecordMetadata recordMetadata, Exception e) -> {
+                if (e == null){
+                    long offset = recordMetadata.offset();
+                    int partition = recordMetadata.partition();
+                    System.out.println("offset -> "+offset + " partition -> "+partition);
+                    System.out.println("msg is sent");
+                }
+                else {
+                    System.out.println("msg sent is failed");
+                }
+
+            } );
+
+            ProducerRecord msg2 = new ProducerRecord("test2topic", "id1", "m9");
+            producer.send(msg2, (RecordMetadata recordMetadata, Exception e) -> {
+                if (e == null){
+                    long offset = recordMetadata.offset();
+                    int partition = recordMetadata.partition();
+                    System.out.println("offset -> "+offset + " partition -> "+partition);
+                    System.out.println("msg2 is sent");
+                }
+                else {
+                    System.out.println("msg sent is failed");
+                }
+
+            } );
+
             producer.flush();
-            System.out.println("msg is sent");
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
