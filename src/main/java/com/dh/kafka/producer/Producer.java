@@ -20,7 +20,7 @@ public class Producer {
             producer = new KafkaProducer<String, String>(properties);
 
 
-            ProducerRecord msg = new ProducerRecord("test2topic", "m8");
+            ProducerRecord msg = new ProducerRecord("test2topic", "m18");
             producer.send(msg, (RecordMetadata recordMetadata, Exception e) -> {
                 if (e == null){
                     long offset = recordMetadata.offset();
@@ -34,7 +34,7 @@ public class Producer {
 
             } );
 
-            ProducerRecord msg2 = new ProducerRecord("test2topic", "id1", "m9");
+            ProducerRecord msg2 = new ProducerRecord("test2topic", "id1", "m19");
             producer.send(msg2, (RecordMetadata recordMetadata, Exception e) -> {
                 if (e == null){
                     long offset = recordMetadata.offset();
